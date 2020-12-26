@@ -1,5 +1,4 @@
 import Network
-import monopolylibs
 import os
 
 n = Network.Network()
