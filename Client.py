@@ -56,37 +56,56 @@ scaler_value = min(x_size, y_size)
 
 
 def draw_base():
+    use_colors = True
     if type(rs.board) == list:
         amount = int(len(rs.board)/4)+2
     else:
         amount = rs.default
+        use_colors = False
     field_texture_blank = pygame.Surface((scaler_value / amount, (scaler_value / amount) * 2))
     field_texture_blank.fill((255, 255, 255))
+    field_seperator = pygame.Surface((5, (scaler_value/amount) * 2))
+    field_seperator.fill((0, 0, 0))
     field_lenght = scaler_value/amount
     for side in range(2):
         if side % 2 == 0:
             field_texture_blank = pygame.transform.rotate(field_texture_blank, 90)
+            field_seperator = pygame.transform.rotate(field_seperator, 90)
             for field_id in range(amount):
+
                 if field_id > 1 and field_id < amount - 2:
-                    field_texture_blank.fill((field_id * 20, field_id * 20, field_id * 20))
+                    col = (145, 242, 126)
+                    field_texture_blank.fill(col)
                     screen.blit(field_texture_blank, (0, (scaler_value / amount) * field_id))
+                    screen.blit(field_seperator, (0, (scaler_value / amount) * field_id - 1))
                     screen.blit(field_texture_blank, (scaler_value-(field_lenght*2), (scaler_value / amount) * field_id))
+                    screen.blit(field_seperator, (scaler_value-(field_lenght*2), (scaler_value / amount) * field_id-1))
         else:
             field_texture_blank = pygame.transform.rotate(field_texture_blank, 90)
+            field_seperator = pygame.transform.rotate(field_seperator, 90)
             for field_id in range(amount):
                 if field_id > 1 and field_id < amount - 2:
-                    field_texture_blank.fill((field_id * 20, field_id * 20, field_id * 20))
+                    col = (145, 242, 126)
+                    field_texture_blank.fill(col)
                     screen.blit(field_texture_blank, (field_lenght * field_id, scaler_value - field_lenght * 2))
+                    screen.blit(field_seperator, (field_lenght * field_id - 1, scaler_value - field_lenght * 2))
                     screen.blit(field_texture_blank, (field_lenght * field_id, 0))
+                    screen.blit(field_seperator, (field_lenght * field_id - 1, 0))
     go_text = pygame.Surface((field_lenght*2, field_lenght*2))
-    prison_text = pygame.Surface((field_lenght, field_lenght))
+    prison_text = pygame.Surface((field_lenght + 1, field_lenght + 1))
     prison_text.fill((23,24,24))
-    go_text.fill((20, 40, 60))
+    go_text.fill((145, 242, 126))
     screen.blit(go_text, (0, 0))
     screen.blit(prison_text, (scaler_value/amount, scaler_value/amount))
     screen.blit(go_text, (scaler_value-field_lenght*2, 0))
     screen.blit(go_text, (0, scaler_value-field_lenght*2))
     screen.blit(go_text, (scaler_value-field_lenght*2, scaler_value-field_lenght*2))
+    field_seperator = pygame.transform.rotate(field_seperator, 90)
+    screen.blit(field_seperator, (0, scaler_value - scaler_value / amount * 2 - 1))
+    screen.blit(field_seperator, (scaler_value-scaler_value/amount*2, scaler_value - scaler_value / amount * 2 - 1))
+    field_seperator = pygame.transform.rotate(field_seperator, 90)
+    screen.blit(field_seperator, (scaler_value-scaler_value/amount*2 - 2, 0))
+    screen.blit(field_seperator, (scaler_value - scaler_value / amount * 2 - 2, scaler_value-scaler_value/amount*2))
 
 def assign_color(id, colors):
     colors[id] = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
