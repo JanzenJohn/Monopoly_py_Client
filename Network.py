@@ -1,5 +1,5 @@
 import socket
-import pickle
+import json
 
 class Network:
     def __init__(self):
@@ -22,27 +22,26 @@ class Network:
         header = self.client.recv(header_size)
         while len(header) < header_size:
             header += self.client.recv(header_size-len(header))
-        header = pickle.loads(header)
+        header = header.decode("utf-8")
+        header = json.loads(header)
         data = self.client.recv(header["message_length"])
         while len(data) < header["message_length"]:
             data += self.client.recv(header["message_length"]-len(data))
-        if header["type"] == "obj":
-            data = pickle.loads(data)
-        elif header["type"] == "str":
+        if header["type"] == "str":
             data = data.decode("utf-8")
         return data, header["request"]
 
 
 
     def send(self, type, data):
-        if type == "obj":
-            array = pickle.dumps(data)
-        elif type == "str":
+        
+        if type == "str":
             array = str.encode(data)
         else:
             return
         header = {"type": type, "message_length": len(array)}
-        header_array = pickle.dumps(header)
+        header_array = json.dumps(header)
+        header_array = header_array.enocode("utf-8")
         header_length = len(header_array)
         header_length = int.to_bytes(header_length, 8, "little")
         self.client.sendall(header_length)
