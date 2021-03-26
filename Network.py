@@ -41,7 +41,7 @@ class Network:
             return
         header = {"type": type, "message_length": len(array)}
         header_array = json.dumps(header)
-        header_array = header_array.enocode("utf-8")
+        header_array = header_array.encode("utf-8")
         header_length = len(header_array)
         header_length = int.to_bytes(header_length, 8, "little")
         self.client.sendall(header_length)
